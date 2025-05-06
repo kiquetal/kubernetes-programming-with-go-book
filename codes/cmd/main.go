@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/kiquetal/kubernetes-programming-with-go-book.git/internal/podcreator"
 )
 

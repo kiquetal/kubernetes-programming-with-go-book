@@ -13,7 +13,7 @@ import (
 	"net/http"
 )
 
-func createPod() error {
+func CreatePod() error {
 	pod := createPodObject()
 	serializer := getJSONSerializer()
 	postBody, err := serializePodObject(serializer, pod)
