@@ -50,21 +50,21 @@ func createPod() error {
 		if err != nil {
 			return err
 		}
-		json, err := json_.MarshalIndent(createdPod, "", "")
+		rJson, err := json_.MarshalIndent(createdPod, "", "")
 		if err != nil {
 			return err
 		}
-		fmt.Printf("%s\n", json)
+		fmt.Printf("%s\n", rJson)
 	} else {
 		status, err := deserializeStatusBody(serializer, body)
 		if err != nil {
 			return err
 		}
-		json, err := json_.MarshalIndent(status, "", "")
+		jsonRes, err := json_.MarshalIndent(status, "", "")
 		if err != nil {
 			return err
 		}
-		fmt.Printf("%s\n", json)
+		fmt.Printf("%s\n", jsonRes)
 	}
 	return nil
 }
@@ -87,8 +87,7 @@ func deserializeStatusBody(serializer runtime.Serializer, body []byte) (*corev1.
 	return &pod, nil
 }
 
-func buildPostRequest(body io.Reader) (*http.Request,
-	error) {
+func buildPostRequest(body io.Reader) (*http.Request, error) {
 	reqCreate, err := http.NewRequest("POST", "http://127.0.0.1:8080/api/v1/namespaces/default/pods", body)
 
 	if err != nil {
@@ -105,16 +104,8 @@ func getJSONSerializer() runtime.Serializer {
 	scheme.AddKnownTypes(schema.GroupVersion{
 		Version: "v1",
 		Group:   "",
-	},
-		&corev1.Pod{},
-		&metav1.Status{},
-	)
-	serializer := json.NewSerializerWithOptions(
-		json.SimpleMetaFactory{},
-		nil,
-		scheme,
-		json.SerializerOptions{},
-	)
+	}, &corev1.Pod{}, &metav1.Status{})
+	serializer := json.NewSerializerWithOptions(json.SimpleMetaFactory{}, nil, scheme, json.SerializerOptions{})
 	return serializer
 }
 
@@ -137,10 +128,7 @@ func createPodObject() *corev1.Pod {
 	return &pod
 }
 
-func serializePodObject(
-	serializer runtime.Serializer,
-	pod *corev1.Pod,
-) (io.Reader, error) {
+func serializePodObject(serializer runtime.Serializer, pod *corev1.Pod) (io.Reader, error) {
 	var buf bytes.Buffer
 	err := serializer.Encode(pod, &buf)
 	if err != nil {
