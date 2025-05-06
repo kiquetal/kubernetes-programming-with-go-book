@@ -15,7 +15,7 @@ import (
 func createPod() error {
 	pod := createPodObject()
 	serializer := getJSONSerializer()
-	postBody, err := serializePodObject(serialzier, pod)
+	postBody, err := serializePodObject(serializer, pod)
 	if err != nil {
 		return err
 	}
@@ -51,6 +51,12 @@ func createPod() error {
 		fmt.Printf("%s\n", json)
 	}
 	return nil
+}
+
+func buildPostRequest(body io.Reader) (*http.Request,
+	error) {
+	reqCreate, err := http.NewRequest("POST", "http://localhost/", body)
+
 }
 
 func getJSONSerializer() runtime.Serializer {
